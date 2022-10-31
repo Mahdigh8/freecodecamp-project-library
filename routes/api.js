@@ -63,17 +63,17 @@ module.exports = function (app) {
       let comment = req.body.comment;
       //json res format same as .get
       if (comment == "" || comment == undefined)
-        return res.send("missing required field comment");
+        return res.status(400).send("missing required field comment");
       try {
         let book = await Book.findById({ _id: bookid });
-        if (!book) return res.send("no book exists");
+        if (!book) return res.status(400).send("no book exists");
         book.comments.push(comment);
         book.commentcount++;
         await book.save();
         book = book.toObject();
         delete book.__v;
         delete book.commentcount;
-        res.json(book);
+        res.status(201).json(book);
       } catch (err) {
         console.log(err);
         res.send("Error!");
@@ -85,7 +85,7 @@ module.exports = function (app) {
       //if successful response will be 'delete successful'
       try {
         const book = await Book.findOne({ _id: bookid });
-        if (!book) return res.send("no book exists");
+        if (!book) return res.status(400).send("no book exists");
         await Book.findByIdAndDelete(bookid);
         res.send("delete successful");
       } catch (err) {
