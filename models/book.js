@@ -10,6 +10,10 @@ const bookSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  comments: {
+    type: [String],
+    default: [],
+  },
 });
 
 module.exports = mongoose.model("books", bookSchema);
